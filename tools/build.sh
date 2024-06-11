@@ -14,6 +14,6 @@ cmake --build . || { cd $originalDir; exit; }
 
 echo
 cd $projectRoot/bin
-./UmikoBot-3
+./UmikoBot-3 "${UMIKO_DEBUG_TOKEN}" # Set this environment variable to the token.
 
 cd $originalDir

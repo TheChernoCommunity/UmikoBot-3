@@ -43,7 +43,7 @@ list(TRANSFORM SOURCES APPEND .cpp)
 # Dependencies.
 #
 
-# None yet.
+add_subdirectory(dep/DPP)
 
 #
 # The executable.
@@ -52,6 +52,7 @@ list(TRANSFORM SOURCES APPEND .cpp)
 add_executable(UmikoBot-3 ${HEADERS} ${SOURCES})
 target_include_directories(UmikoBot-3 PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
+target_link_libraries(UmikoBot-3 PRIVATE dpp)
 
 #
 # Compiler specific configuration.

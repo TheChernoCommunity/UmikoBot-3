@@ -51,18 +51,20 @@ DisableFormat: 'false'
 FixNamespaceComments: 'true'
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '<glad.+>'
+  - Regex:           '<dpp.+>'
     Priority:        1
-  - Regex:           '<glm.+>'
+  - Regex:           '<glad.+>'
     Priority:        2
-  - Regex:           '<json.+>'
+  - Regex:           '<glm.+>'
     Priority:        3
+  - Regex:           '<json.+>'
+    Priority:        4
   - Regex:           '<SDL.+>'
-    Priority:        4
+    Priority:        5
   - Regex:           '<stb.+>'
-    Priority:        4
+    Priority:        6
   - Regex:           '<X11.+>'
-    Priority:        4
+    Priority:        7
   - Regex:           '<[[:alnum:]._/]+>'
     Priority:        100
   - Regex:           '.*'
