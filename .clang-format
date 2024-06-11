@@ -61,10 +61,12 @@ IncludeCategories:
     Priority:        4
   - Regex:           '<SDL.+>'
     Priority:        5
-  - Regex:           '<stb.+>'
+  - Regex:           '<spdlog.+>'
     Priority:        6
-  - Regex:           '<X11.+>'
+  - Regex:           '<stb.+>'
     Priority:        7
+  - Regex:           '<X11.+>'
+    Priority:        8
   - Regex:           '<[[:alnum:]._/]+>'
     Priority:        100
   - Regex:           '.*'

@@ -1,3 +1,6 @@
 [submodule "dep/DPP"]
 	path = dep/DPP
 	url = https://github.com/brainboxdotcc/DPP
+[submodule "dep/spdlog"]
+	path = dep/spdlog
+	url = https://github.com/gabime/spdlog
