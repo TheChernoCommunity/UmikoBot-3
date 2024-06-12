@@ -1,3 +1,4 @@
+#include "commands/general.hpp"
 #include "common.hpp"
 #include "umiko_bot.hpp"
 
@@ -95,20 +96,10 @@ void UmikoBot::log_error(const std::string& message) {
 }
 
 void UmikoBot::create_all_commands() {
-    register_global_commands();
+    register_general_commands(*this);
 
     for (auto [name, command] : commands) {
         dpp::slashcommand newCommand { name, command.description, internalBot.me.id };
         internalBot.global_command_create(newCommand);
     }
-}
-
-// @Cleanup: Move global commands to outside the main bot?
-void UmikoBot::register_global_commands() {
-    register_command({ .name = "ping", .description = "Ping pong!", .callback = handle_ping });
-}
-
-void UmikoBot::handle_ping(const UmikoBot& bot, const dpp::slashcommand_t& event) {
-    UNUSED(bot);
-    event.reply("Pong!");
 }

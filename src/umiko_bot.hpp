@@ -30,9 +30,6 @@ public:
 private:
     void create_all_commands();
 
-    void register_global_commands();
-    static void handle_ping(const UmikoBot& bot, const dpp::slashcommand_t& event);
-
 public:
     std::unordered_map<std::string, UmikoCommand> commands;
 
