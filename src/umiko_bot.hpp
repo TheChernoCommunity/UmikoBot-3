@@ -28,6 +28,9 @@ struct UserData {
 
 struct GuildData {
     std::unordered_map<dpp::snowflake, UserData> allUsersData;
+
+    std::string currencyLongName  = "Umiko Coins";
+    std::string currencyShortName = "UC";
 };
 
 class UmikoBot {
