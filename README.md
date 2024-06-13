@@ -22,7 +22,7 @@ git submodule update --init --recursive
 
 ### Building and running
 
-Run `tools/build.sh` (Linux, preferred) or `tools\\build.bat` (Windows) from any directory. This will build the entire project (the first build will take a long time as it builds all dependencies), and will run it on a successful build.
+Run `tools/build.sh` (Linux, preferred) or `tools\build.bat` (Windows) from any directory. This will build the entire project (the first build will take a long time as it builds all dependencies), and will run it on a successful build.
 
 You can find the executable in the `bin/` directory, run it from there if you're running it manually.
 
