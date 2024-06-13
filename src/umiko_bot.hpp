@@ -38,6 +38,9 @@ public:
 
     void register_command(const UmikoCommand& command);
 
+    GuildData& get_guild_data(const dpp::slashcommand_t& event);
+    UserData& get_user_data(const dpp::slashcommand_t& event);
+
     UMIKO_PRINTF_LIKE void log_info(const char* format, ...);
     UMIKO_PRINTF_LIKE void log_error(const char* format, ...);
 
@@ -53,6 +56,6 @@ private:
     std::shared_ptr<spdlog::async_logger> logger;
 };
 
-// @Cleanup: Move all the logging stuff to a new file.
+// @Cleanup: Move all the logging stuff to a new file?
 std::string format_to_string(const char* format, ...);
 std::string vformat_to_string(const char* format, va_list args);

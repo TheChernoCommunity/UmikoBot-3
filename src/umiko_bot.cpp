@@ -86,6 +86,24 @@ void UmikoBot::register_command(const UmikoCommand& command) {
     commands.emplace(command.name, command);
 }
 
+GuildData& UmikoBot::get_guild_data(const dpp::slashcommand_t& event) {
+    dpp::snowflake guildId              = event.command.get_guild().id;
+    auto [guildDataPair, guildInserted] = allGuildsData.try_emplace(guildId, GuildData {});
+    GuildData& guildData                = guildDataPair->second;
+
+    return guildData;
+}
+
+UserData& UmikoBot::get_user_data(const dpp::slashcommand_t& event) {
+    GuildData& guildData = get_guild_data(event);
+
+    dpp::snowflake userId             = event.command.get_issuing_user().id;
+    auto [userDataPair, userInserted] = guildData.allUsersData.try_emplace(userId, UserData {});
+    UserData& userData                = userDataPair->second;
+
+    return userData;
+}
+
 std::string format_to_string(const char* format, ...) {
     va_list args;
     va_start(args, format);

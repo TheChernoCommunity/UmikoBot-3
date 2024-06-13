@@ -2,13 +2,7 @@
 #include "umiko_bot.hpp"
 
 static void handle_daily(UmikoBot& bot, const dpp::slashcommand_t& event) {
-    dpp::snowflake guildId              = event.command.get_guild().id;
-    auto [guildDataPair, guildInserted] = bot.allGuildsData.try_emplace(guildId, GuildData {});
-    GuildData& guildData                = guildDataPair->second;
-
-    dpp::snowflake userId             = event.command.get_issuing_user().id;
-    auto [userDataPair, userInserted] = guildData.allUsersData.try_emplace(userId, UserData {});
-    UserData& userData                = userDataPair->second;
+    UserData& userData = bot.get_user_data(event);
 
     // @Settings.
     constexpr int AMOUNT_TO_ADD  = 10000;
@@ -19,14 +13,7 @@ static void handle_daily(UmikoBot& bot, const dpp::slashcommand_t& event) {
 }
 
 static void handle_wallet(UmikoBot& bot, const dpp::slashcommand_t& event) {
-    // @Cleanup: We'll probably be copying this info getting thing a lot...
-    dpp::snowflake guildId              = event.command.get_guild().id;
-    auto [guildDataPair, guildInserted] = bot.allGuildsData.try_emplace(guildId, GuildData {});
-    GuildData& guildData                = guildDataPair->second;
-
-    dpp::snowflake userId             = event.command.get_issuing_user().id;
-    auto [userDataPair, userInserted] = guildData.allUsersData.try_emplace(userId, UserData {});
-    UserData& userData                = userDataPair->second;
+    UserData& userData = bot.get_user_data(event);
 
     // @Settings.
     event.reply(format_to_string("You have **%f** coins.", userData.coinsInCents / 100.0f));
