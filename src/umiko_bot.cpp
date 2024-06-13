@@ -1,4 +1,3 @@
-#include "commands/general.hpp"
 #include "common.hpp"
 #include "umiko_bot.hpp"
 
@@ -125,6 +124,7 @@ void UmikoBot::log_error(const char* format, ...) {
 }
 
 void UmikoBot::create_all_commands() {
+    void register_general_commands(UmikoBot & bot);
     register_general_commands(*this);
 
     std::vector<dpp::slashcommand> newCommands;

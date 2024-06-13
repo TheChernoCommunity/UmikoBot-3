@@ -21,8 +21,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 set(HPP_CPP_PAIRS
     umiko_bot
-
-    commands/general
 )
 
 set(HEADERS
@@ -32,6 +30,8 @@ set(HEADERS
 )
 set(SOURCES
     main
+
+    commands/general
 
     ${HPP_CPP_PAIRS}
 )
