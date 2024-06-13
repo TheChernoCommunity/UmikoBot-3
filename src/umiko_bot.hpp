@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common.hpp"
+
 #include <dpp/dpp.h>
 
 #include <spdlog/async.h>
@@ -27,8 +29,8 @@ public:
 
     void register_command(const UmikoCommand& command);
 
-    void log_info(const std::string& message);
-    void log_error(const std::string& message);
+    UMIKO_PRINTF_LIKE void log_info(const char* format, ...);
+    UMIKO_PRINTF_LIKE void log_error(const char* format, ...);
 
 private:
     void create_all_commands();

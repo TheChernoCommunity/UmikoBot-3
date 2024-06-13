@@ -9,6 +9,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <stdarg.h>
+
 UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
     //
     // Initialising spdlog.
@@ -63,15 +65,13 @@ UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
         auto search             = commands.find(commandName);
 
         if (search == commands.end()) {
-            // @Incomplete: Formatted messages.
-            // log_error("Tried to use slash command '%s', doesn't exist in our records.", commandName);
+            log_error("Tried to use slash command '%s', doesn't exist in our records.", commandName.c_str());
             return;
         }
 
         UmikoCommand& command = search->second;
         if (!command.callback) {
-            // @Incomplete: Formatted messages.
-            // log_error("Registered command '%s' has no associated callback.", commandName);
+            log_error("Registered command '%s' has no associated callback.", commandName.c_str());
             return;
         }
 
@@ -87,12 +87,41 @@ void UmikoBot::register_command(const UmikoCommand& command) {
     commands.emplace(command.name, command);
 }
 
-void UmikoBot::log_info(const std::string& message) {
-    internalBot.log(dpp::loglevel::ll_info, message);
+std::string format_to_string(const char* format, va_list args) {
+    // We need a copy of the args list because we need to call vsnprintf twice.
+    va_list argsCopy;
+    va_copy(argsCopy, args);
+
+    size_t bufferLength = vsnprintf(nullptr, 0, format, args) + 1;
+    char* buffer        = new char[bufferLength]();
+    vsnprintf(buffer, bufferLength, format, argsCopy);
+
+    std::string result = buffer;
+
+    delete[] buffer;
+    va_end(argsCopy);
+
+    return result;
 }
 
-void UmikoBot::log_error(const std::string& message) {
+void UmikoBot::log_info(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    std::string message = format_to_string(format, args);
+    internalBot.log(dpp::loglevel::ll_info, message);
+
+    va_end(args);
+}
+
+void UmikoBot::log_error(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    std::string message = format_to_string(format, args);
     internalBot.log(dpp::loglevel::ll_error, message);
+
+    va_end(args);
 }
 
 void UmikoBot::create_all_commands() {
