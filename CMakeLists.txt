@@ -31,7 +31,7 @@ set(HEADERS
 set(SOURCES
     main
 
-    commands/general
+    commands/general commands/currency
 
     ${HPP_CPP_PAIRS}
 )

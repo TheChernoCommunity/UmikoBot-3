@@ -1,7 +1,7 @@
 #include "common.hpp"
 #include "umiko_bot.hpp"
 
-static void handle_ping(const UmikoBot& bot, const dpp::slashcommand_t& event) {
+static void handle_ping(UmikoBot& bot, const dpp::slashcommand_t& event) {
     UNUSED(bot);
     event.reply("Pong!");
 }

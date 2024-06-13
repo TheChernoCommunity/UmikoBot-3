@@ -86,7 +86,17 @@ void UmikoBot::register_command(const UmikoCommand& command) {
     commands.emplace(command.name, command);
 }
 
-std::string format_to_string(const char* format, va_list args) {
+std::string format_to_string(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    std::string message = vformat_to_string(format, args);
+
+    va_end(args);
+    return message;
+}
+
+std::string vformat_to_string(const char* format, va_list args) {
     // We need a copy of the args list because we need to call vsnprintf twice.
     va_list argsCopy;
     va_copy(argsCopy, args);
@@ -107,7 +117,7 @@ void UmikoBot::log_info(const char* format, ...) {
     va_list args;
     va_start(args, format);
 
-    std::string message = format_to_string(format, args);
+    std::string message = vformat_to_string(format, args);
     internalBot.log(dpp::loglevel::ll_info, message);
 
     va_end(args);
@@ -117,7 +127,7 @@ void UmikoBot::log_error(const char* format, ...) {
     va_list args;
     va_start(args, format);
 
-    std::string message = format_to_string(format, args);
+    std::string message = vformat_to_string(format, args);
     internalBot.log(dpp::loglevel::ll_error, message);
 
     va_end(args);
@@ -125,7 +135,10 @@ void UmikoBot::log_error(const char* format, ...) {
 
 void UmikoBot::create_all_commands() {
     void register_general_commands(UmikoBot & bot);
+    void register_currency_commands(UmikoBot & bot);
+
     register_general_commands(*this);
+    register_currency_commands(*this);
 
     std::vector<dpp::slashcommand> newCommands;
     newCommands.reserve(commands.size());
