@@ -98,8 +98,26 @@ void UmikoBot::log_error(const std::string& message) {
 void UmikoBot::create_all_commands() {
     register_general_commands(*this);
 
-    for (auto [name, command] : commands) {
-        dpp::slashcommand newCommand { name, command.description, internalBot.me.id };
-        internalBot.global_command_create(newCommand);
+    std::vector<dpp::slashcommand> newCommands;
+    newCommands.reserve(commands.size());
+
+    for (auto& [name, command] : commands) {
+        newCommands.emplace_back(name, command.description, internalBot.me.id);
+        dpp::slashcommand& newCommand = newCommands.back();
+
+        if (command.moderatorOnly) {
+            // This is set to the manage messages permission for now because that's what we had
+            // before, but this could be improved.
+            //
+            // @Incomplete: Allow setting permissions for individual commands, such as requiring
+            // the ban members permission for the warn command (if we even want that command).
+            //
+            // @Incomplete: Create a command for administrator only that adds specific users to
+            // a whitelist, so that they can use elevated commands.
+            newCommand.set_default_permissions(dpp::p_manage_messages);
+        }
     }
+
+    // We only deploy to the Cherno Community server for now...
+    internalBot.guild_bulk_command_create(newCommands, 776172716268847114);
 }

@@ -11,9 +11,12 @@ class UmikoBot;
 using CommandCallback = void (*)(const UmikoBot& bot, const dpp::slashcommand_t& event);
 
 struct UmikoCommand {
-    std::string name         = "";
-    std::string description  = "";
+    std::string name        = "";
+    std::string description = "";
+
     CommandCallback callback = NULL;
+
+    bool moderatorOnly = false;
 };
 
 class UmikoBot {
