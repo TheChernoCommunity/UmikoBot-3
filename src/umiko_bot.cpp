@@ -121,6 +121,23 @@ UserData& UmikoBot::get_user_data(const dpp::slashcommand_t& event) {
 
 constexpr const char* UMIKO_DATA_FILE_NAME = "data.json";
 
+// This is a little bit weird, but we need to define custom functions for converting a snowflake
+// to and from JSON.
+//
+// The nlohmann/json library requires these functions to be defined in the same namespace as the
+// class/struct itself, so we need to add them to the dpp namespace here.
+namespace dpp {
+
+    void to_json(nlohmann::json& json, const dpp::snowflake& snowflake) {
+        json = (uint64_t) snowflake;
+    }
+
+    void from_json(const nlohmann::json& json, dpp::snowflake& snowflake) {
+        snowflake = json.get<std::string>();
+    }
+
+} // namespace dpp
+
 void UmikoBot::save_to_file() {
     nlohmann::json json = allGuildsData;
 
@@ -144,17 +161,14 @@ void UmikoBot::load_from_file() {
         return;
     }
 
-    nlohmann::json json;
-
-    try {
-        json = nlohmann::json::parse(inputFile);
-    } catch (nlohmann::json::parse_error) {
+    nlohmann::json json = nlohmann::json::parse(inputFile, nullptr, false);
+    if (json.is_discarded()) {
         log_error("Malformed json file '%s', using defaults.", UMIKO_DATA_FILE_NAME);
         return;
     }
 
     allGuildsData = json.template get<std::unordered_map<dpp::snowflake, GuildData>>();
-    log_info("Loaded data from file '%s'.\nData: %s", UMIKO_DATA_FILE_NAME, to_string(json).c_str());
+    log_info("Loaded data from file '%s'.\nData: %s", UMIKO_DATA_FILE_NAME, json.dump(4).c_str());
 }
 
 std::string format_to_string(const char* format, ...) {
