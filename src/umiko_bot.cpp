@@ -8,6 +8,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <fstream>
 #include <stdarg.h>
 
 UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
@@ -47,6 +48,8 @@ UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
     // Initialising the bot.
     //
 
+    load_from_file();
+
     internalBot.on_ready([this](const dpp::ready_t& event) {
         UNUSED(event);
 
@@ -57,6 +60,14 @@ UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
         if (dpp::run_once<struct register_bot_commands>()) {
             create_all_commands();
         }
+
+        // Set up a timer to save once every minute.
+        internalBot.start_timer(
+            [this](const dpp::timer& timer) {
+                UNUSED(timer);
+                save_to_file();
+            },
+            60);
     });
 
     internalBot.on_slashcommand([this](const dpp::slashcommand_t& event) {
@@ -76,6 +87,10 @@ UmikoBot::UmikoBot(const std::string& token) : internalBot(token) {
 
         command.callback(*this, event);
     });
+}
+
+UmikoBot::~UmikoBot() {
+    save_to_file();
 }
 
 void UmikoBot::run() {
@@ -104,12 +119,42 @@ UserData& UmikoBot::get_user_data(const dpp::slashcommand_t& event) {
     return userData;
 }
 
+constexpr const char* UMIKO_DATA_FILE_NAME = "data.json";
+
 void UmikoBot::save_to_file() {
-    // @Incomplete.
+    nlohmann::json json = allGuildsData;
+
+    std::ofstream outputFile { UMIKO_DATA_FILE_NAME, std::ios::out | std::ios::trunc };
+    if (!outputFile.is_open()) {
+        log_error("Failed to open output file '%s' to save data.", UMIKO_DATA_FILE_NAME);
+        return;
+    }
+
+    outputFile << json << std::endl;
+
+    // We probably want to comment this out when not using it for debugging, else it will clog up the
+    // output file with a whole bunch of these messages (since we're probably saving pretty often).
+    log_info("Saved data to JSON file.");
 }
 
 void UmikoBot::load_from_file() {
-    // @Incomplete.
+    std::ifstream inputFile { UMIKO_DATA_FILE_NAME };
+    if (!inputFile.is_open()) {
+        log_info("Failed to open output file '%s' to load data, using defaults.", UMIKO_DATA_FILE_NAME);
+        return;
+    }
+
+    nlohmann::json json;
+
+    try {
+        json = nlohmann::json::parse(inputFile);
+    } catch (nlohmann::json::parse_error) {
+        log_error("Malformed json file '%s', using defaults.", UMIKO_DATA_FILE_NAME);
+        return;
+    }
+
+    allGuildsData = json.template get<std::unordered_map<dpp::snowflake, GuildData>>();
+    log_info("Loaded data from file '%s'.\nData: %s", UMIKO_DATA_FILE_NAME, to_string(json).c_str());
 }
 
 std::string format_to_string(const char* format, ...) {

@@ -25,10 +25,30 @@ struct UmikoCommand {
 };
 
 struct UserData {
+    //
+    // @Important @Volatile
+    //
+    // If you're adding members to this struct, be sure to update the
+    // macro invocation below with the new members you've added to allow for automatic
+    // serialisation and de-serialisation!
+    //
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(UserData, coinsInCents);
+
     int coinsInCents = 0;
 };
 
 struct GuildData {
+    //
+    // @Important @Volatile
+    //
+    // If you're adding members to this struct, be sure to update the
+    // macro invocation below with the new members you've added to allow for automatic
+    // serialisation and de-serialisation!
+    //
+
+    NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(GuildData, allUsersData, currencyLongName, currencyShortName);
+
     std::unordered_map<dpp::snowflake, UserData> allUsersData;
 
     std::string currencyLongName  = "Umiko Coins";
@@ -38,6 +58,10 @@ struct GuildData {
 class UmikoBot {
 public:
     UmikoBot(const std::string& token);
+    ~UmikoBot();
+
+    UmikoBot(const UmikoBot&)            = delete;
+    UmikoBot& operator=(const UmikoBot&) = delete;
 
     void run();
 
