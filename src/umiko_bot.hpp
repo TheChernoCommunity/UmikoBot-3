@@ -4,6 +4,8 @@
 
 #include <dpp/dpp.h>
 
+#include <nlohmann/json.hpp>
+
 #include <spdlog/async.h>
 
 #include <string>
@@ -49,6 +51,9 @@ public:
 
 private:
     void create_all_commands();
+
+    void save_to_file();
+    void load_from_file();
 
 public:
     std::unordered_map<std::string, UmikoCommand> commands;

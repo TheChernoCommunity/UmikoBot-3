@@ -52,25 +52,27 @@ FixNamespaceComments: 'true'
 IncludeBlocks: Regroup
 IncludeCategories:
   - Regex:           '<dpp.+>'
-    Priority:        1
+    Priority:        40
   - Regex:           '<glad.+>'
-    Priority:        2
+    Priority:        70
   - Regex:           '<glm.+>'
-    Priority:        3
+    Priority:        71
   - Regex:           '<json.+>'
-    Priority:        4
-  - Regex:           '<SDL.+>'
-    Priority:        5
-  - Regex:           '<spdlog.+>'
-    Priority:        6
-  - Regex:           '<stb.+>'
-    Priority:        7
-  - Regex:           '<X11.+>'
-    Priority:        8
-  - Regex:           '<[[:alnum:]._/]+>'
     Priority:        100
+  - Regex:           '<nlohmann.+>'
+    Priority:        140
+  - Regex:           '<SDL.+>'
+    Priority:        190
+  - Regex:           '<spdlog.+>'
+    Priority:        191
+  - Regex:           '<stb.+>'
+    Priority:        192
+  - Regex:           '<X11.+>'
+    Priority:        240
+  - Regex:           '<[[:alnum:]._/]+>'
+    Priority:        1000
   - Regex:           '.*'
-    Priority:    0
+    Priority:        0
 IndentCaseLabels: 'false'
 IndentPPDirectives: BeforeHash
 IndentWidth: '4'

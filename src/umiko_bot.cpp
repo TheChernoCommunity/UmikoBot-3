@@ -104,6 +104,14 @@ UserData& UmikoBot::get_user_data(const dpp::slashcommand_t& event) {
     return userData;
 }
 
+void UmikoBot::save_to_file() {
+    // @Incomplete.
+}
+
+void UmikoBot::load_from_file() {
+    // @Incomplete.
+}
+
 std::string format_to_string(const char* format, ...) {
     va_list args;
     va_start(args, format);

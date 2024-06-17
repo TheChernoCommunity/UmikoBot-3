@@ -47,7 +47,9 @@ list(TRANSFORM SOURCES APPEND .cpp)
 #
 
 add_subdirectory(dep/DPP)
+add_subdirectory(dep/json)
 add_subdirectory(dep/spdlog)
+
 
 #
 # The executable.
@@ -57,6 +59,7 @@ add_executable(UmikoBot-3 ${HEADERS} ${SOURCES})
 target_include_directories(UmikoBot-3 PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 target_link_libraries(UmikoBot-3 PRIVATE dpp)
+target_link_libraries(UmikoBot-3 PRIVATE nlohmann_json)
 target_link_libraries(UmikoBot-3 PRIVATE spdlog)
 
 #
